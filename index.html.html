@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jorge Venegas — Video Editor &amp; Motion Graphics Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14120E;
+    --surface:#1D1A15;
+    --surface-2:#242019;
+    --line:#332E24;
+    --ink:#F3F0E7;
+    --ink-dim:#A39C8C;
+    --green:#2E7D46;
+    --green-bright:#5FBE82;
+    --gold:#E8B854;
+    --radius:2px;
+    --maxw:1120px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+  }
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
+
+  /* ---------- NAV ---------- */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(20,18,14,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-mark{
+    font-family:'Anton', sans-serif;
+    font-size:20px; letter-spacing:0.04em;
+    color:var(--ink);
+  }
+  .nav-mark span{color:var(--green-bright);}
+  .nav-links{display:flex; gap:28px; list-style:none; margin:0; padding:0;}
+  .nav-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; text-transform:uppercase; letter-spacing:0.08em;
+    text-decoration:none; color:var(--ink-dim);
+    transition:color 0.2s ease;
+  }
+  .nav-links a:hover{color:var(--gold);}
+  @media (max-width:640px){
+    .nav-links{gap:16px;}
+    .nav-links li:nth-child(3){display:none;}
+  }
+
+  /* ---------- TIMELINE RULER (signature divider) ---------- */
+  .ruler{
+    position:relative;
+    height:34px;
+    margin:0 0;
+    overflow:hidden;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:
+      repeating-linear-gradient(
+        90deg,
+        var(--line) 0px, var(--line) 1px,
+        transparent 1px, transparent 40px
+      );
+  }
+  .ruler::before{
+    content:"";
+    position:absolute; left:0; top:0; bottom:0; width:2px;
+    background:var(--gold);
+    animation:scrub 14s linear infinite;
+  }
+  @keyframes scrub{
+    0%{left:0%;}
+    100%{left:100%;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 56px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; text-transform:uppercase; color:var(--gold);
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:"●";
+    color:#E85454;
+    font-size:10px;
+    animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+  h1.display{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size:clamp(48px, 9vw, 104px);
+    line-height:0.94;
+    letter-spacing:0.01em;
+    margin:0 0 18px;
+    text-transform:uppercase;
+  }
+  h1.display .accent{color:var(--green-bright);}
+
+  .role-line{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(14px, 2vw, 18px);
+    color:var(--ink-dim);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin:0 0 28px;
+  }
+
+  .hero-pitch{
+    max-width:620px;
+    font-size:17px;
+    color:#D8D3C6;
+    margin:0 0 36px;
+  }
+
+  .hero-cta{display:flex; flex-wrap:wrap; gap:14px;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; text-transform:uppercase; letter-spacing:0.05em;
+    padding:13px 22px;
+    text-decoration:none;
+    border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-primary{
+    background:var(--green); color:#F3F0E7; border:1px solid var(--green);
+  }
+  .btn-primary:hover{background:var(--green-bright); border-color:var(--green-bright); transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent; color:var(--ink); border:1px solid var(--line);
+  }
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold); transform:translateY(-1px);}
+
+  /* ---------- SECTIONS ---------- */
+  section.chapter{
+    padding:64px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .chapter-head{
+    display:flex; align-items:baseline; gap:16px;
+    margin-bottom:14px; flex-wrap:wrap;
+  }
+  .chapter-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; color:var(--gold);
+  }
+  .chapter-title{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size:clamp(26px, 4vw, 38px);
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    margin:0;
+  }
+  .chapter-intro{
+    max-width:680px;
+    color:var(--ink-dim);
+    font-size:15px;
+    margin:0 0 34px;
+  }
+  .chapter-intro b{color:var(--ink); font-weight:600;}
+
+  /* ---------- VIDEO EMBED CARDS (YouTube) ---------- */
+  .video-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:22px;
+  }
+  .video-grid.single{grid-template-columns:1fr; max-width:760px;}
+  @media (max-width:760px){ .video-grid{grid-template-columns:1fr;} }
+
+  .video-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .video-frame{
+    position:relative; width:100%; padding-top:56.25%;
+    background:#000;
+  }
+  .video-frame iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0;
+  }
+  .video-meta{padding:16px 18px 20px;}
+  .video-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--green-bright);
+    text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:6px;
+  }
+  .video-title{font-weight:600; font-size:15px; margin:0 0 6px;}
+  .video-desc{font-size:13.5px; color:var(--ink-dim); margin:0;}
+
+  /* ---------- LINK CARDS (Instagram) ---------- */
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:18px;
+  }
+  @media (max-width:880px){ .card-grid{grid-template-columns:repeat(2, 1fr);} }
+  @media (max-width:560px){ .card-grid{grid-template-columns:1fr;} }
+
+  .ig-card{
+    display:block; text-decoration:none;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 20px;
+    transition:border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+    position:relative;
+  }
+  .ig-card:hover{
+    border-color:var(--green-bright);
+    background:var(--surface-2);
+    transform:translateY(-2px);
+  }
+  .ig-play{
+    width:38px; height:38px; border-radius:50%;
+    border:1.5px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+    color:var(--gold);
+    font-size:13px;
+  }
+  .ig-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--ink-dim);
+    text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:8px;
+  }
+  .ig-title{font-weight:600; font-size:15.5px; margin:0 0 8px;}
+  .ig-desc{font-size:13.5px; color:var(--ink-dim); margin:0 0 16px;}
+  .ig-link{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; color:var(--green-bright);
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+
+  /* ---------- TOOLS ---------- */
+  .tools-row{
+    display:flex; flex-wrap:wrap; gap:12px;
+  }
+  .tool-badge{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    border:1px solid var(--line);
+    padding:10px 16px;
+    border-radius:var(--radius);
+    color:var(--ink-dim);
+  }
+  .tool-badge.primary{
+    color:var(--ink); border-color:var(--green); background:rgba(46,125,70,0.12);
+  }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{padding:80px 0 60px;}
+  .contact-headline{
+    font-family:'Anton', sans-serif; font-weight:400;
+    font-size:clamp(32px, 6vw, 56px);
+    text-transform:uppercase;
+    line-height:1.02;
+    margin:0 0 30px;
+    max-width:720px;
+  }
+  .contact-headline .accent{color:var(--gold);}
+  .contact-row{
+    display:flex; flex-wrap:wrap; gap:32px;
+    margin-bottom:44px;
+  }
+  .contact-item{font-size:15px;}
+  .contact-item span{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--ink-dim);
+    text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:4px;
+  }
+  .contact-item a{text-decoration:none; color:var(--ink); border-bottom:1px solid var(--line);}
+  .contact-item a:hover{color:var(--green-bright); border-color:var(--green-bright);}
+
+  .foot-end{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--ink-dim);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    padding-top:24px; border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-mark">JORGE<span>.</span>VENEGAS</div>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="ruler" role="presentation"></div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow mono">REC · 00:00:00:00</div>
+      <h1 class="display">JORGE<br>VENEGAS<span class="accent">.</span></h1>
+      <p class="role-line">Video Editor &amp; Motion Graphics Designer</p>
+      <p class="hero-pitch">
+        I cut short-form social content in Premiere Pro and After Effects: podcast episodes,
+        a short film, brand content, and paid campaigns. 100+ pieces delivered, peaks of
+        up to 1M views, with AI tools (Higgsfield, Midjourney, RunwayML, Firefly) built
+        into the daily workflow.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#work">See the work ↓</a>
+        <a class="btn btn-ghost" href="mailto:jorgevenegas2344@gmail.com">Email me</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/venegasjorger" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PODCAST -->
+  <section class="chapter" id="work">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num mono">01 · 00:12:30</span>
+        <h2 class="chapter-title">Podcast</h2>
+      </div>
+      <p class="chapter-intro">
+        Two seasons, 60 episodes. I own the full pipeline: season planning, guest outreach
+        and recording, editing, and publishing — <b>a previously dormant channel, now at
+        5,000+ subscribers and 1M+ total views.</b>
+      </p>
+      <div class="video-grid">
+        <div class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/pVPRPmlSZ-w" title="Podcast episodio A" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono">Irrazonables — Podcast</div>
+            <p class="video-title">Humanos en la Era de la IA</p>
+            <p class="video-desc">Full episode — recorded, edited, and published.</p>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/c8gRa3lI4jY" title="Podcast episodio B" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono">Irrazonables — Podcast</div>
+            <p class="video-title">Humanos en la Era de la IA</p>
+            <p class="video-desc">Another episode from the series — same end-to-end process.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORTOMETRAJE -->
+  <section class="chapter">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num mono">02 · 00:04:15</span>
+        <h2 class="chapter-title">Short Film</h2>
+      </div>
+      <p class="chapter-intro">
+        A short film I directed, produced, and edited, with a crew of up to 15 people —
+        from script to delivery.
+      </p>
+      <div class="video-grid single">
+        <div class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/vhloBwTZuiY" title="Cortometraje" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono">Direction · Production · Editing</div>
+            <p class="video-title">Short Film</p>
+            <p class="video-desc">Personal project — own concept, shoot, and post-production.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IRRAZONABLES REELS -->
+  <section class="chapter">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num mono">03 · 00:00:45</span>
+        <h2 class="chapter-title">Brand Reels — Irrazonables</h2>
+      </div>
+      <p class="chapter-intro">
+        Part of <b>100+ pieces delivered</b> for the agency's brands — peaks of up to
+        <b>1,000,000 views</b> per piece.
+      </p>
+      <div class="card-grid">
+        <a class="ig-card" href="https://www.instagram.com/p/DaG6mABtT2m/" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono">Irrazonables · Reel</div>
+          <p class="ig-title">Brand content</p>
+          <p class="ig-desc">Short-form for Instagram — script, edit, and pacing.</p>
+          <div class="ig-link">View on Instagram ↗</div>
+        </a>
+        <a class="ig-card" href="https://www.instagram.com/p/DXu62zUNkWC/" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono">Irrazonables · Reel</div>
+          <p class="ig-title">Brand content</p>
+          <p class="ig-desc">Short-form for Instagram — script, edit, and pacing.</p>
+          <div class="ig-link">View on Instagram ↗</div>
+        </a>
+        <a class="ig-card" href="https://www.instagram.com/p/DWXXCjLDb2i/" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono">Irrazonables · Reel</div>
+          <p class="ig-title">Brand content</p>
+          <p class="ig-desc">Short-form for Instagram — script, edit, and pacing.</p>
+          <div class="ig-link">View on Instagram ↗</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 48DOTS -->
+  <section class="chapter">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num mono">04 · 00:01:20</span>
+        <h2 class="chapter-title">48dots — Clients &amp; In-House Brand</h2>
+      </div>
+      <p class="chapter-intro">
+        As co-founder, I edit and direct content for agency and client brands, keeping
+        each one's tone consistent.
+      </p>
+      <div class="card-grid">
+        <a class="ig-card" href="https://www.instagram.com/p/DICPvpTpsQA/?img_index=1" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono">El Suave · Client</div>
+          <p class="ig-title">Seasonal drink</p>
+          <p class="ig-desc">Product content for a bar/restaurant.</p>
+          <div class="ig-link">View on Instagram ↗</div>
+        </a>
+        <a class="ig-card" href="https://www.instagram.com/p/DTlNL6EgERy/" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono">Indegostudio · Brand</div>
+          <p class="ig-title">Product campaign</p>
+          <p class="ig-desc">Clothing brand run under 48dots.</p>
+          <div class="ig-link">View on Instagram ↗</div>
+        </a>
+        <a class="ig-card" href="https://www.instagram.com/p/DVZWWL6jeu-/" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono">Indegostudio · Brand</div>
+          <p class="ig-title">Product campaign</p>
+          <p class="ig-desc">Clothing brand run under 48dots.</p>
+          <div class="ig-link">View on Instagram ↗</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONAL -->
+  <section class="chapter">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num mono">05 · 00:00:30</span>
+        <h2 class="chapter-title">Personal Work</h2>
+      </div>
+      <p class="chapter-intro">
+        No client brief — my own photo and video work, to keep the eye sharp.
+      </p>
+      <div class="card-grid">
+        <a class="ig-card" href="https://www.instagram.com/p/DAT-qKwRcE1/?img_index=1" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono">Personal profile</div>
+          <p class="ig-title">CDMX — personal series</p>
+          <p class="ig-desc">Personal photo and video work in Mexico City.</p>
+          <div class="ig-link">View on Instagram ↗</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="chapter" id="tools">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num mono">06 · TOOLKIT</span>
+        <h2 class="chapter-title">Tools</h2>
+      </div>
+      <div class="tools-row">
+        <span class="tool-badge primary">Adobe Premiere Pro</span>
+        <span class="tool-badge primary">Adobe After Effects</span>
+        <span class="tool-badge">CapCut</span>
+        <span class="tool-badge">Canva</span>
+        <span class="tool-badge">Higgsfield</span>
+        <span class="tool-badge">Midjourney</span>
+        <span class="tool-badge">RunwayML</span>
+        <span class="tool-badge">Adobe Firefly</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <p class="contact-headline">Let's build the <span class="accent">next cut</span>.</p>
+    <div class="contact-row">
+      <div class="contact-item">
+        <span>Email</span>
+        <a href="mailto:jorgevenegas2344@gmail.com">jorgevenegas2344@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <span>Phone</span>
+        <a href="tel:+524493528001">449&nbsp;352&nbsp;80&nbsp;01</a>
+      </div>
+      <div class="contact-item">
+        <span>Location</span>
+        <span style="color:var(--ink);">Aguascalientes, Mexico</span>
+      </div>
+      <div class="contact-item">
+        <span>LinkedIn</span>
+        <a href="https://www.linkedin.com/in/venegasjorger" target="_blank" rel="noopener">linkedin.com/in/venegasjorger</a>
+      </div>
+    </div>
+    <div class="foot-end">
+      <span>© Jorge Venegas Romo</span>
+      <span>END · 00:00:00:00</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
