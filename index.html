@@ -275,20 +275,90 @@
     text-transform:uppercase; letter-spacing:0.04em;
   }
 
+  /* ---------- VIDEO CAROUSEL (auto-drift, speeds up on hover) ---------- */
+  .carousel-viewport{
+    overflow:hidden;
+    position:relative;
+    margin:0 -4px;
+  }
+  .carousel-viewport::before, .carousel-viewport::after{
+    content:"";
+    position:absolute; top:0; bottom:0; width:56px; z-index:2;
+    pointer-events:none;
+  }
+  .carousel-viewport::before{ left:0; background:linear-gradient(90deg, var(--bg), transparent); }
+  .carousel-viewport::after{ right:0; background:linear-gradient(270deg, var(--bg), transparent); }
+  .carousel-track{
+    display:flex;
+    gap:18px;
+    width:max-content;
+    padding:4px;
+    animation: carousel-drift 55s linear infinite reverse;
+  }
+  .carousel-viewport:hover .carousel-track,
+  .carousel-viewport:focus-within .carousel-track{
+    animation-duration:14s;
+  }
+  .carousel-track .ig-card{
+    width:300px; flex:0 0 auto;
+  }
+  @keyframes carousel-drift{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .carousel-track{ animation:none; }
+  }
+
   /* ---------- TOOLS ---------- */
   .tools-row{
     display:flex; flex-wrap:wrap; gap:12px;
   }
   .tool-badge{
+    position:relative;
     font-family:'IBM Plex Mono', monospace;
     font-size:13px;
     border:1px solid var(--line);
     padding:10px 16px;
     border-radius:var(--radius);
     color:var(--ink-dim);
+    cursor:default;
   }
   .tool-badge.primary{
     color:var(--ink); border-color:var(--green); background:rgba(46,125,70,0.12);
+  }
+  .tool-preview{
+    position:absolute;
+    bottom:calc(100% + 10px);
+    left:50%;
+    transform:translateX(-50%) translateY(6px);
+    width:60px; height:60px;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.18s ease, transform 0.18s ease;
+    box-shadow:0 10px 26px rgba(0,0,0,0.45);
+    z-index:10;
+  }
+  .tool-preview::after{
+    content:"";
+    position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:6px solid transparent;
+    border-top-color:var(--surface-2);
+  }
+  .tool-badge:hover .tool-preview,
+  .tool-badge:focus-visible .tool-preview{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+  .tool-preview img{ width:34px; height:34px; object-fit:contain; }
+  .tool-preview .tool-fallback{
+    display:none;
+    font-family:'Anton', sans-serif;
+    font-size:18px;
+    color:var(--gold);
   }
 
   /* ---------- CONTACT / FOOTER ---------- */
@@ -323,6 +393,52 @@
     display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
     padding-top:24px; border-top:1px solid var(--line);
   }
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.in-view{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- SHORT FILM BLUR-TO-REVEAL ---------- */
+  .video-blur-overlay{
+    position:absolute; inset:0; z-index:3;
+    display:flex; align-items:center; justify-content:center;
+    backdrop-filter:blur(16px) brightness(0.55);
+    -webkit-backdrop-filter:blur(16px) brightness(0.55);
+    cursor:pointer;
+    transition:opacity 0.35s ease;
+  }
+  .video-blur-overlay.is-hidden{
+    opacity:0; pointer-events:none;
+  }
+  .blur-play{
+    width:56px; height:56px; border-radius:50%;
+    border:1.5px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:18px;
+    background:rgba(20,18,14,0.55);
+  }
+
+  /* ---------- LANGUAGE TOGGLE ---------- */
+  .lang-toggle{
+    font-size:12px; letter-spacing:0.08em;
+    background:transparent; color:var(--ink-dim);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    transition:border-color 0.18s ease, color 0.18s ease;
+  }
+  .lang-toggle:hover{ border-color:var(--gold); color:var(--gold); }
 </style>
 </head>
 <body>
@@ -331,10 +447,11 @@
   <div class="nav-inner">
     <div class="nav-mark">JORGE<span>.</span>VENEGAS</div>
     <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
-      <li><a href="#tools">Tools</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#work" data-i18n="navWork">Work</a></li>
+      <li><a href="#tools" data-i18n="navTools">Tools</a></li>
+      <li><a href="#contact" data-i18n="navContact">Contact</a></li>
     </ul>
+    <button id="langToggle" class="lang-toggle mono" type="button" aria-label="Switch language / Cambiar idioma">ES</button>
   </div>
 </header>
 
@@ -347,16 +464,16 @@
     <div class="wrap">
       <div class="eyebrow mono">REC · 00:00:00:00</div>
       <h1 class="display">JORGE<br>VENEGAS<span class="accent">.</span></h1>
-      <p class="role-line">Video Editor &amp; Motion Graphics Designer</p>
-      <p class="hero-pitch">
+      <p class="role-line" data-i18n="heroRole">Video Editor &amp; Motion Graphics Designer</p>
+      <p class="hero-pitch" data-i18n="heroPitch">
         I cut short-form social content in Premiere Pro and After Effects: podcast episodes,
         a short film, brand content, and paid campaigns. 100+ pieces delivered, peaks of
         up to 1M views, with AI tools (Higgsfield, Midjourney, RunwayML, Firefly) built
         into the daily workflow.
       </p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#work">See the work ↓</a>
-        <a class="btn btn-ghost" href="mailto:jorgevenegas2344@gmail.com">Email me</a>
+        <a class="btn btn-primary" href="#work" data-i18n="ctaWork">See the work ↓</a>
+        <a class="btn btn-ghost" href="mailto:jorgevenegas2344@gmail.com" data-i18n="ctaEmail">Email me</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/venegasjorger" target="_blank" rel="noopener">LinkedIn ↗</a>
       </div>
     </div>
@@ -365,34 +482,34 @@
   <!-- PODCAST -->
   <section class="chapter" id="work">
     <div class="wrap">
-      <div class="chapter-head">
+      <div class="chapter-head reveal">
         <span class="chapter-num mono">01 · 00:12:30</span>
         <h2 class="chapter-title">Podcast</h2>
       </div>
-      <p class="chapter-intro">
+      <p class="chapter-intro reveal" data-i18n="podcastIntro">
         Two seasons, 60 episodes. I own the full pipeline: season planning, guest outreach
         and recording, editing, and publishing — <b>a previously dormant channel, now at
         5,000+ subscribers and 1M+ total views.</b>
       </p>
       <div class="video-grid">
-        <div class="video-card">
+        <div class="video-card reveal">
           <div class="video-frame">
             <iframe src="https://www.youtube.com/embed/pVPRPmlSZ-w" title="Podcast episodio A" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="video-meta">
             <div class="video-tag mono">Irrazonables — Podcast</div>
             <p class="video-title">Humanos en la Era de la IA</p>
-            <p class="video-desc">Full episode — recorded, edited, and published.</p>
+            <p class="video-desc" data-i18n="podcastDesc1">Full episode — recorded, edited, and published.</p>
           </div>
         </div>
-        <div class="video-card">
+        <div class="video-card reveal">
           <div class="video-frame">
             <iframe src="https://www.youtube.com/embed/c8gRa3lI4jY" title="Podcast episodio B" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="video-meta">
             <div class="video-tag mono">Irrazonables — Podcast</div>
             <p class="video-title">Humanos en la Era de la IA</p>
-            <p class="video-desc">Another episode from the series — same end-to-end process.</p>
+            <p class="video-desc" data-i18n="podcastDesc2">Another episode from the series — same end-to-end process.</p>
           </div>
         </div>
       </div>
@@ -402,23 +519,52 @@
   <!-- CORTOMETRAJE -->
   <section class="chapter">
     <div class="wrap">
-      <div class="chapter-head">
+      <div class="chapter-head reveal">
         <span class="chapter-num mono">02 · 00:04:15</span>
-        <h2 class="chapter-title">Short Film</h2>
+        <h2 class="chapter-title" data-i18n="shortTitle">Short Film</h2>
       </div>
-      <p class="chapter-intro">
+      <p class="chapter-intro reveal" data-i18n="shortIntro">
         A short film I directed, produced, and edited, with a crew of up to 15 people —
         from script to delivery.
       </p>
-      <div class="video-grid single">
-        <div class="video-card">
+      <div class="video-grid">
+        <div class="video-card reveal">
           <div class="video-frame">
             <iframe src="https://www.youtube.com/embed/vhloBwTZuiY" title="Cortometraje" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-blur-overlay" onclick="this.classList.add('is-hidden')">
+              <div class="blur-play">▶</div>
+            </div>
           </div>
           <div class="video-meta">
-            <div class="video-tag mono">Direction · Production · Editing</div>
-            <p class="video-title">Short Film</p>
-            <p class="video-desc">Personal project — own concept, shoot, and post-production.</p>
+            <div class="video-tag mono" data-i18n="shortTag">Direction · Production · Editing</div>
+            <p class="video-title" data-i18n="shortTitle">Short Film</p>
+            <p class="video-desc" data-i18n="shortDesc">Personal project — own concept, shoot, and post-production.</p>
+          </div>
+        </div>
+        <div class="video-card reveal">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/tr6qwabFE44" title="Short Film 2" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-blur-overlay" onclick="this.classList.add('is-hidden')">
+              <div class="blur-play">▶</div>
+            </div>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono" data-i18n="shortTag">Direction · Production · Editing</div>
+            <p class="video-title" data-i18n="shortTitle">Short Film</p>
+            <p class="video-desc" data-i18n="shortDesc">Personal project — own concept, shoot, and post-production.</p>
+          </div>
+        </div>
+        <div class="video-card reveal">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/Pi8kieGNw2s?start=140" title="Short Film 3" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-blur-overlay" onclick="this.classList.add('is-hidden')">
+              <div class="blur-play">▶</div>
+            </div>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono" data-i18n="shortTag">Direction · Production · Editing</div>
+            <p class="video-title" data-i18n="shortTitle">Short Film</p>
+            <p class="video-desc" data-i18n="shortDesc">Personal project — own concept, shoot, and post-production.</p>
           </div>
         </div>
       </div>
@@ -428,36 +574,60 @@
   <!-- IRRAZONABLES REELS -->
   <section class="chapter">
     <div class="wrap">
-      <div class="chapter-head">
+      <div class="chapter-head reveal">
         <span class="chapter-num mono">03 · 00:00:45</span>
-        <h2 class="chapter-title">Brand Reels — Irrazonables</h2>
+        <h2 class="chapter-title" data-i18n="reelsTitle">Brand Reels — Irrazonables</h2>
       </div>
-      <p class="chapter-intro">
+      <p class="chapter-intro reveal" data-i18n="reelsIntro">
         Part of <b>100+ pieces delivered</b> for the agency's brands — peaks of up to
         <b>1,000,000 views</b> per piece.
       </p>
-      <div class="card-grid">
-        <a class="ig-card" href="https://www.instagram.com/p/DaG6mABtT2m/" target="_blank" rel="noopener">
-          <div class="ig-play">▶</div>
-          <div class="ig-tag mono">Irrazonables · Reel</div>
-          <p class="ig-title">Brand content</p>
-          <p class="ig-desc">Short-form for Instagram — script, edit, and pacing.</p>
-          <div class="ig-link">View on Instagram ↗</div>
-        </a>
-        <a class="ig-card" href="https://www.instagram.com/p/DXu62zUNkWC/" target="_blank" rel="noopener">
-          <div class="ig-play">▶</div>
-          <div class="ig-tag mono">Irrazonables · Reel</div>
-          <p class="ig-title">Brand content</p>
-          <p class="ig-desc">Short-form for Instagram — script, edit, and pacing.</p>
-          <div class="ig-link">View on Instagram ↗</div>
-        </a>
-        <a class="ig-card" href="https://www.instagram.com/p/DWXXCjLDb2i/" target="_blank" rel="noopener">
-          <div class="ig-play">▶</div>
-          <div class="ig-tag mono">Irrazonables · Reel</div>
-          <p class="ig-title">Brand content</p>
-          <p class="ig-desc">Short-form for Instagram — script, edit, and pacing.</p>
-          <div class="ig-link">View on Instagram ↗</div>
-        </a>
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DaG6mABtT2m/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DXu62zUNkWC/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DWXXCjLDb2i/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <!-- duplicado para el loop continuo del carrusel -->
+          <a class="ig-card" href="https://www.instagram.com/p/DaG6mABtT2m/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DXu62zUNkWC/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DWXXCjLDb2i/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -465,36 +635,60 @@
   <!-- 48DOTS -->
   <section class="chapter">
     <div class="wrap">
-      <div class="chapter-head">
+      <div class="chapter-head reveal">
         <span class="chapter-num mono">04 · 00:01:20</span>
-        <h2 class="chapter-title">48dots — Clients &amp; In-House Brand</h2>
+        <h2 class="chapter-title" data-i18n="dotsTitle">48dots — Clients &amp; In-House Brand</h2>
       </div>
-      <p class="chapter-intro">
+      <p class="chapter-intro reveal" data-i18n="dotsIntro">
         As co-founder, I edit and direct content for agency and client brands, keeping
         each one's tone consistent.
       </p>
-      <div class="card-grid">
-        <a class="ig-card" href="https://www.instagram.com/p/DICPvpTpsQA/?img_index=1" target="_blank" rel="noopener">
-          <div class="ig-play">▶</div>
-          <div class="ig-tag mono">El Suave · Client</div>
-          <p class="ig-title">Seasonal drink</p>
-          <p class="ig-desc">Product content for a bar/restaurant.</p>
-          <div class="ig-link">View on Instagram ↗</div>
-        </a>
-        <a class="ig-card" href="https://www.instagram.com/p/DTlNL6EgERy/" target="_blank" rel="noopener">
-          <div class="ig-play">▶</div>
-          <div class="ig-tag mono">Indegostudio · Brand</div>
-          <p class="ig-title">Product campaign</p>
-          <p class="ig-desc">Clothing brand run under 48dots.</p>
-          <div class="ig-link">View on Instagram ↗</div>
-        </a>
-        <a class="ig-card" href="https://www.instagram.com/p/DVZWWL6jeu-/" target="_blank" rel="noopener">
-          <div class="ig-play">▶</div>
-          <div class="ig-tag mono">Indegostudio · Brand</div>
-          <p class="ig-title">Product campaign</p>
-          <p class="ig-desc">Clothing brand run under 48dots.</p>
-          <div class="ig-link">View on Instagram ↗</div>
-        </a>
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DICPvpTpsQA/?img_index=1" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="suaveTag">El Suave · Client</div>
+            <p class="ig-title" data-i18n="dotsCard1Title">Seasonal drink</p>
+            <p class="ig-desc" data-i18n="dotsCard1Desc">Product content for a bar/restaurant.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DTlNL6EgERy/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DVZWWL6jeu-/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <!-- duplicado para el loop continuo del carrusel -->
+          <a class="ig-card" href="https://www.instagram.com/p/DICPvpTpsQA/?img_index=1" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="suaveTag">El Suave · Client</div>
+            <p class="ig-title" data-i18n="dotsCard1Title">Seasonal drink</p>
+            <p class="ig-desc" data-i18n="dotsCard1Desc">Product content for a bar/restaurant.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DTlNL6EgERy/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DVZWWL6jeu-/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -502,20 +696,20 @@
   <!-- PERSONAL -->
   <section class="chapter">
     <div class="wrap">
-      <div class="chapter-head">
+      <div class="chapter-head reveal">
         <span class="chapter-num mono">05 · 00:00:30</span>
-        <h2 class="chapter-title">Personal Work</h2>
+        <h2 class="chapter-title" data-i18n="personalTitle">Personal Work</h2>
       </div>
-      <p class="chapter-intro">
+      <p class="chapter-intro reveal" data-i18n="personalIntro">
         No client brief — my own photo and video work, to keep the eye sharp.
       </p>
       <div class="card-grid">
-        <a class="ig-card" href="https://www.instagram.com/p/DAT-qKwRcE1/?img_index=1" target="_blank" rel="noopener">
+        <a class="ig-card reveal" href="https://www.instagram.com/p/DAT-qKwRcE1/?img_index=1" target="_blank" rel="noopener">
           <div class="ig-play">▶</div>
-          <div class="ig-tag mono">Personal profile</div>
-          <p class="ig-title">CDMX — personal series</p>
-          <p class="ig-desc">Personal photo and video work in Mexico City.</p>
-          <div class="ig-link">View on Instagram ↗</div>
+          <div class="ig-tag mono" data-i18n="personalTag">Personal profile</div>
+          <p class="ig-title" data-i18n="personalCardTitle">CDMX — personal series</p>
+          <p class="ig-desc" data-i18n="personalCardDesc">Personal photo and video work in Mexico City.</p>
+          <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
         </a>
       </div>
     </div>
@@ -524,19 +718,53 @@
   <!-- TOOLS -->
   <section class="chapter" id="tools">
     <div class="wrap">
-      <div class="chapter-head">
+      <div class="chapter-head reveal">
         <span class="chapter-num mono">06 · TOOLKIT</span>
-        <h2 class="chapter-title">Tools</h2>
+        <h2 class="chapter-title" data-i18n="toolsTitle">Tools</h2>
       </div>
       <div class="tools-row">
-        <span class="tool-badge primary">Adobe Premiere Pro</span>
-        <span class="tool-badge primary">Adobe After Effects</span>
-        <span class="tool-badge">CapCut</span>
-        <span class="tool-badge">Canva</span>
-        <span class="tool-badge">Higgsfield</span>
-        <span class="tool-badge">Midjourney</span>
-        <span class="tool-badge">RunwayML</span>
-        <span class="tool-badge">Adobe Firefly</span>
+        <span class="tool-badge primary reveal" tabindex="0">Adobe Premiere Pro
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobepremierepro/9999FF" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Pr</span></span>
+        </span>
+        <span class="tool-badge primary reveal" tabindex="0">Adobe After Effects
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobeaftereffects/9999FF" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ae</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">CapCut
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/capcut/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">CC</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Canva
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/canva/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ca</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Higgsfield
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/higgsfield/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Hf</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Midjourney
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/midjourney/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Mj</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">RunwayML
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/runway/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Rw</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Adobe Firefly
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobe/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Fy</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">DaVinci Resolve
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/davinciresolve/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Dr</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Adobe Photoshop
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobephotoshop/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ps</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Adobe Illustrator
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobeillustrator/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ai</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0" data-i18n="toolCamera">Camera
+          <span class="tool-preview"><span class="tool-fallback" style="display:block;">📷</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0" data-i18n="toolGimbal">Gimbal
+          <span class="tool-preview"><span class="tool-fallback" style="display:block;">🎥</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0" data-i18n="toolLighting">Lighting
+          <span class="tool-preview"><span class="tool-fallback" style="display:block;">💡</span></span>
+        </span>
       </div>
     </div>
   </section>
@@ -545,22 +773,22 @@
 
 <footer id="contact">
   <div class="wrap">
-    <p class="contact-headline">Let's build the <span class="accent">next cut</span>.</p>
+    <p class="contact-headline reveal" data-i18n="footerHeadline">Let's build the <span class="accent">next cut</span>.</p>
     <div class="contact-row">
-      <div class="contact-item">
-        <span>Email</span>
+      <div class="contact-item reveal">
+        <span data-i18n="footerEmailLabel">Email</span>
         <a href="mailto:jorgevenegas2344@gmail.com">jorgevenegas2344@gmail.com</a>
       </div>
-      <div class="contact-item">
-        <span>Phone</span>
+      <div class="contact-item reveal">
+        <span data-i18n="footerPhoneLabel">Phone</span>
         <a href="tel:+524493528001">449&nbsp;352&nbsp;80&nbsp;01</a>
       </div>
-      <div class="contact-item">
-        <span>Location</span>
+      <div class="contact-item reveal">
+        <span data-i18n="footerLocationLabel">Location</span>
         <span style="color:var(--ink);">Aguascalientes, Mexico</span>
       </div>
-      <div class="contact-item">
-        <span>LinkedIn</span>
+      <div class="contact-item reveal">
+        <span data-i18n="footerLinkedinLabel">LinkedIn</span>
         <a href="https://www.linkedin.com/in/venegasjorger" target="_blank" rel="noopener">linkedin.com/in/venegasjorger</a>
       </div>
     </div>
@@ -570,6 +798,133 @@
     </div>
   </div>
 </footer>
+
+<script>
+(function(){
+  var translations = {
+    en: {
+      navWork: "Work", navTools: "Tools", navContact: "Contact",
+      heroRole: "Video Editor &amp; Motion Graphics Designer",
+      heroPitch: "I cut short-form social content in Premiere Pro and After Effects: podcast episodes, a short film, brand content, and paid campaigns. 100+ pieces delivered, peaks of up to 1M views, with AI tools (Higgsfield, Midjourney, RunwayML, Firefly) built into the daily workflow.",
+      ctaWork: "See the work ↓", ctaEmail: "Email me",
+      podcastIntro: "Two seasons, 60 episodes. I own the full pipeline: season planning, guest outreach and recording, editing, and publishing — <b>a previously dormant channel, now at 5,000+ subscribers and 1M+ total views.</b>",
+      podcastDesc1: "Full episode — recorded, edited, and published.",
+      podcastDesc2: "Another episode from the series — same end-to-end process.",
+      shortTitle: "Short Film",
+      shortIntro: "A short film I directed, produced, and edited, with a crew of up to 15 people — from script to delivery.",
+      shortTag: "Direction · Production · Editing",
+      shortDesc: "Personal project — own concept, shoot, and post-production.",
+      reelsTitle: "Brand Reels — Irrazonables",
+      reelsIntro: "Part of <b>100+ pieces delivered</b> for the agency's brands — peaks of up to <b>1,000,000 views</b> per piece.",
+      reelsCardTitle: "Brand content",
+      reelsCardDesc: "Short-form for Instagram — script, edit, and pacing.",
+      viewIG: "View on Instagram ↗",
+      dotsTitle: "48dots — Clients &amp; In-House Brand",
+      dotsIntro: "As co-founder, I edit and direct content for agency and client brands, keeping each one's tone consistent.",
+      suaveTag: "El Suave · Client",
+      dotsCard1Title: "Seasonal drink",
+      dotsCard1Desc: "Product content for a bar/restaurant.",
+      indegoTag: "Indegostudio · Brand",
+      dotsCard2Title: "Product campaign",
+      dotsCard2Desc: "Clothing brand run under 48dots.",
+      personalTitle: "Personal Work",
+      personalIntro: "No client brief — my own photo and video work, to keep the eye sharp.",
+      personalTag: "Personal profile",
+      personalCardTitle: "CDMX — personal series",
+      personalCardDesc: "Personal photo and video work in Mexico City.",
+      toolsTitle: "Tools",
+      toolCamera: "Camera", toolGimbal: "Gimbal", toolLighting: "Lighting",
+      footerHeadline: "Let's build the <span class=\"accent\">next cut</span>.",
+      footerEmailLabel: "Email", footerPhoneLabel: "Phone",
+      footerLocationLabel: "Location", footerLinkedinLabel: "LinkedIn"
+    },
+    es: {
+      navWork: "Trabajo", navTools: "Herramientas", navContact: "Contacto",
+      heroRole: "Editor de Video y Diseñador de Motion Graphics",
+      heroPitch: "Edito contenido corto para redes en Premiere Pro y After Effects: episodios de podcast, un cortometraje, contenido de marca y campañas pagadas. 100+ piezas entregadas, picos de hasta 1M de vistas, con herramientas de IA (Higgsfield, Midjourney, RunwayML, Firefly) integradas al flujo de trabajo diario.",
+      ctaWork: "Ver el trabajo ↓", ctaEmail: "Escríbeme",
+      podcastIntro: "Dos temporadas, 60 episodios. Manejo todo el proceso: planeación de temporada, contacto y grabación de invitados, edición y publicación — <b>un canal que estaba dormido y ahora tiene 5,000+ suscriptores y 1M+ de vistas totales.</b>",
+      podcastDesc1: "Episodio completo — grabado, editado y publicado.",
+      podcastDesc2: "Otro episodio de la serie — mismo proceso de punta a punta.",
+      shortTitle: "Cortometraje",
+      shortIntro: "Un cortometraje que dirigí, produje y edité, con un equipo de hasta 15 personas — de guión a entrega.",
+      shortTag: "Dirección · Producción · Edición",
+      shortDesc: "Proyecto personal — concepto, rodaje y postproducción propios.",
+      reelsTitle: "Reels de Marca — Irrazonables",
+      reelsIntro: "Parte de las <b>100+ piezas entregadas</b> para las marcas de la agencia — picos de hasta <b>1,000,000 de vistas</b> por pieza.",
+      reelsCardTitle: "Contenido de marca",
+      reelsCardDesc: "Formato corto para Instagram — guión, edición y ritmo.",
+      viewIG: "Ver en Instagram ↗",
+      dotsTitle: "48dots — Clientes y Marca Propia",
+      dotsIntro: "Como cofundador, edito y dirijo contenido para las marcas de la agencia y de clientes, manteniendo el tono de cada una.",
+      suaveTag: "El Suave · Cliente",
+      dotsCard1Title: "Bebida de temporada",
+      dotsCard1Desc: "Contenido de producto para un bar/restaurante.",
+      indegoTag: "Indegostudio · Marca",
+      dotsCard2Title: "Campaña de producto",
+      dotsCard2Desc: "Marca de ropa operada bajo 48dots.",
+      personalTitle: "Trabajo Personal",
+      personalIntro: "Sin brief de cliente — mi propio trabajo de foto y video, para mantener el ojo afilado.",
+      personalTag: "Perfil personal",
+      personalCardTitle: "CDMX — serie personal",
+      personalCardDesc: "Trabajo personal de foto y video en la Ciudad de México.",
+      toolsTitle: "Herramientas",
+      toolCamera: "Cámara", toolGimbal: "Gimbal", toolLighting: "Iluminación",
+      footerHeadline: "Construyamos el <span class=\"accent\">próximo corte</span>.",
+      footerEmailLabel: "Correo", footerPhoneLabel: "Teléfono",
+      footerLocationLabel: "Ubicación", footerLinkedinLabel: "LinkedIn"
+    }
+  };
+
+  var btn = document.getElementById('langToggle');
+  var root = document.documentElement;
+
+  function apply(lang){
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      var val = translations[lang][key];
+      if(val !== undefined){ el.innerHTML = val; }
+    });
+    root.setAttribute('lang', lang);
+    root.setAttribute('data-lang', lang);
+    if(btn){ btn.textContent = lang === 'en' ? 'ES' : 'EN'; }
+    try{ localStorage.setItem('jv-lang', lang); }catch(e){}
+  }
+
+  var saved = 'en';
+  try{ saved = localStorage.getItem('jv-lang') || 'en'; }catch(e){}
+  apply(saved);
+
+  if(btn){
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-lang') === 'es' ? 'es' : 'en';
+      apply(current === 'en' ? 'es' : 'en');
+    });
+  }
+})();
+</script>
+
+<script>
+(function(){
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  els.forEach(function(el, i){
+    el.style.transitionDelay = (i % 6) * 70 + 'ms';
+  });
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add('in-view'); });
+  }
+})();
+</script>
 
 </body>
 </html>
