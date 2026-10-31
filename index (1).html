@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jorge Venegas — Content Producer &amp; Community Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@600;800&family=Inter:wght@400;500;600&family=Newsreader:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14120E;
+    --surface:#1D1A15;
+    --surface-2:#242019;
+    --line:#332E24;
+    --ink:#F3F0E7;
+    --ink-dim:#A39C8C;
+    --green:#2E7D46;
+    --green-bright:#5FBE82;
+    --gold:#E8B854;
+    --radius:2px;
+    --maxw:1120px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+  }
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
+
+  /* ---------- NAV ---------- */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(20,18,14,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-mark{
+    font-family:'Anton', sans-serif;
+    font-size:20px; letter-spacing:0.04em;
+    color:var(--ink);
+  }
+  .nav-mark span{color:var(--green-bright);}
+  .nav-links{display:flex; gap:28px; list-style:none; margin:0; padding:0;}
+  .nav-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; text-transform:uppercase; letter-spacing:0.08em;
+    text-decoration:none; color:var(--ink-dim);
+    transition:color 0.2s ease;
+  }
+  .nav-links a:hover{color:var(--gold);}
+  @media (max-width:640px){
+    .nav-links{gap:16px;}
+    .nav-links li:nth-child(3){display:none;}
+  }
+
+  /* ---------- TIMELINE RULER (signature divider) ---------- */
+  .ruler{
+    position:relative;
+    height:34px;
+    margin:0 0;
+    overflow:hidden;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:
+      repeating-linear-gradient(
+        90deg,
+        var(--line) 0px, var(--line) 1px,
+        transparent 1px, transparent 40px
+      );
+  }
+  .ruler::before{
+    content:"";
+    position:absolute; left:0; top:0; bottom:0; width:2px;
+    background:var(--gold);
+    animation:scrub 14s linear infinite;
+  }
+  @keyframes scrub{
+    0%{left:0%;}
+    100%{left:100%;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 56px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; text-transform:uppercase; color:var(--gold);
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:"●";
+    color:#E85454;
+    font-size:10px;
+    animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+  h1.display{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size:clamp(48px, 9vw, 104px);
+    line-height:0.94;
+    letter-spacing:0.01em;
+    margin:0 0 18px;
+    text-transform:uppercase;
+  }
+  h1.display .accent{color:var(--green-bright);}
+
+  .role-line{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(14px, 2vw, 18px);
+    color:var(--ink-dim);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin:0 0 28px;
+  }
+
+  .hero-pitch{
+    max-width:620px;
+    font-size:17px;
+    color:#D8D3C6;
+    margin:0 0 36px;
+  }
+
+  .hero-cta{display:flex; flex-wrap:wrap; gap:14px;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; text-transform:uppercase; letter-spacing:0.05em;
+    padding:13px 22px;
+    text-decoration:none;
+    border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-primary{
+    background:var(--green); color:#F3F0E7; border:1px solid var(--green);
+  }
+  .btn-primary:hover{background:var(--green-bright); border-color:var(--green-bright); transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent; color:var(--ink); border:1px solid var(--line);
+  }
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold); transform:translateY(-1px);}
+
+  /* ---------- SECTIONS ---------- */
+  section.chapter{
+    padding:64px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .chapter-head{
+    display:flex; align-items:baseline; gap:16px;
+    margin-bottom:14px; flex-wrap:wrap;
+  }
+  .chapter-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; color:var(--gold);
+  }
+  .chapter-title{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size:clamp(26px, 4vw, 38px);
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    margin:0;
+  }
+  .chapter-intro{
+    max-width:680px;
+    color:var(--ink-dim);
+    font-size:15px;
+    margin:0 0 34px;
+  }
+  .chapter-intro b{color:var(--ink); font-weight:600;}
+
+  /* ---------- VIDEO EMBED CARDS (YouTube) ---------- */
+  .video-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:22px;
+  }
+  .video-grid.single{grid-template-columns:1fr; max-width:760px;}
+  @media (max-width:760px){ .video-grid{grid-template-columns:1fr;} }
+
+  .video-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .video-frame{
+    position:relative; width:100%; padding-top:56.25%;
+    background:#000;
+  }
+  .video-frame iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0;
+  }
+  .video-meta{padding:16px 18px 20px;}
+  .video-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--green-bright);
+    text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:6px;
+  }
+  .video-title{font-weight:600; font-size:15px; margin:0 0 6px;}
+  .video-desc{font-size:13.5px; color:var(--ink-dim); margin:0;}
+
+  /* ---------- LINK CARDS (Instagram) ---------- */
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:18px;
+  }
+  @media (max-width:880px){ .card-grid{grid-template-columns:repeat(2, 1fr);} }
+  @media (max-width:560px){ .card-grid{grid-template-columns:1fr;} }
+
+  .ig-card{
+    display:block; text-decoration:none;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 20px;
+    transition:border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+    position:relative;
+  }
+  .ig-card:hover{
+    border-color:var(--green-bright);
+    background:var(--surface-2);
+    transform:translateY(-2px);
+  }
+  .ig-play{
+    width:38px; height:38px; border-radius:50%;
+    border:1.5px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+    color:var(--gold);
+    font-size:13px;
+  }
+  .ig-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--ink-dim);
+    text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:8px;
+  }
+  .ig-title{font-weight:600; font-size:15.5px; margin:0 0 8px;}
+  .ig-desc{font-size:13.5px; color:var(--ink-dim); margin:0 0 16px;}
+  .ig-link{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; color:var(--green-bright);
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+
+  /* ---------- VIDEO CAROUSEL (auto-drift, speeds up on hover) ---------- */
+  .carousel-viewport{
+    overflow:hidden;
+    position:relative;
+    margin:0 -4px;
+  }
+  .carousel-viewport::before, .carousel-viewport::after{
+    content:"";
+    position:absolute; top:0; bottom:0; width:56px; z-index:2;
+    pointer-events:none;
+  }
+  .carousel-viewport::before{ left:0; background:linear-gradient(90deg, var(--bg), transparent); }
+  .carousel-viewport::after{ right:0; background:linear-gradient(270deg, var(--bg), transparent); }
+  .carousel-track{
+    display:flex;
+    gap:18px;
+    width:max-content;
+    padding:4px;
+    animation: carousel-drift 55s linear infinite reverse;
+  }
+  .carousel-viewport:hover .carousel-track,
+  .carousel-viewport:focus-within .carousel-track{
+    animation-duration:14s;
+  }
+  .carousel-track .ig-card{
+    width:300px; flex:0 0 auto;
+  }
+  @keyframes carousel-drift{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .carousel-track{ animation:none; }
+  }
+
+  /* ---------- TOOLS ---------- */
+  .tools-row{
+    display:flex; flex-wrap:wrap; gap:12px;
+  }
+  .tool-badge{
+    position:relative;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    border:1px solid var(--line);
+    padding:10px 16px;
+    border-radius:var(--radius);
+    color:var(--ink-dim);
+    cursor:default;
+  }
+  .tool-badge.primary{
+    color:var(--ink); border-color:var(--green); background:rgba(46,125,70,0.12);
+  }
+  .tool-preview{
+    position:absolute;
+    bottom:calc(100% + 10px);
+    left:50%;
+    transform:translateX(-50%) translateY(6px);
+    width:60px; height:60px;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.18s ease, transform 0.18s ease;
+    box-shadow:0 10px 26px rgba(0,0,0,0.45);
+    z-index:10;
+  }
+  .tool-preview::after{
+    content:"";
+    position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:6px solid transparent;
+    border-top-color:var(--surface-2);
+  }
+  .tool-badge:hover .tool-preview,
+  .tool-badge:focus-visible .tool-preview{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+  .tool-preview img{ width:34px; height:34px; object-fit:contain; }
+  .tool-preview .tool-fallback{
+    display:none;
+    font-family:'Anton', sans-serif;
+    font-size:18px;
+    color:var(--gold);
+  }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{padding:80px 0 60px;}
+  .contact-headline{
+    font-family:'Anton', sans-serif; font-weight:400;
+    font-size:clamp(32px, 6vw, 56px);
+    text-transform:uppercase;
+    line-height:1.02;
+    margin:0 0 30px;
+    max-width:720px;
+  }
+  .contact-headline .accent{color:var(--gold);}
+  .contact-row{
+    display:flex; flex-wrap:wrap; gap:32px;
+    margin-bottom:44px;
+  }
+  .contact-item{font-size:15px;}
+  .contact-item span{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--ink-dim);
+    text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:4px;
+  }
+  .contact-item a{text-decoration:none; color:var(--ink); border-bottom:1px solid var(--line);}
+  .contact-item a:hover{color:var(--green-bright); border-color:var(--green-bright);}
+
+  .foot-end{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--ink-dim);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    padding-top:24px; border-top:1px solid var(--line);
+  }
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.in-view{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- SHORT FILM BLUR-TO-REVEAL ---------- */
+  .video-blur-overlay{
+    position:absolute; inset:0; z-index:3;
+    display:flex; align-items:center; justify-content:center;
+    backdrop-filter:blur(16px) brightness(0.55);
+    -webkit-backdrop-filter:blur(16px) brightness(0.55);
+    cursor:pointer;
+    transition:opacity 0.35s ease;
+  }
+  .video-blur-overlay.is-hidden{
+    opacity:0; pointer-events:none;
+  }
+  .blur-play{
+    width:56px; height:56px; border-radius:50%;
+    border:1.5px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:18px;
+    background:rgba(20,18,14,0.55);
+  }
+
+  /* ---------- LANGUAGE TOGGLE ---------- */
+  .lang-toggle{
+    font-size:12px; letter-spacing:0.08em;
+    background:transparent; color:var(--ink-dim);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    transition:border-color 0.18s ease, color 0.18s ease;
+  }
+  .lang-toggle:hover{ border-color:var(--gold); color:var(--gold); }
+  .case,.facts{margin:0 0 28px;display:grid;gap:14px;}
+  .case>div,.facts>div{display:grid;grid-template-columns:150px 1fr;gap:18px;border-top:1px solid var(--line);padding-top:12px;}
+  .case dt,.facts dt{color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .case dd,.facts dd{margin:0;color:var(--ink);max-width:70ch;}
+  .index-title{font-family:'Anton',sans-serif;font-weight:400;font-size:28px;margin:44px 0 12px;}
+  .index{list-style:none;margin:0;padding:0;}
+  .index li{border-top:1px solid var(--line);}
+  .index a{display:block;padding:12px 0;text-decoration:none;}
+  .index a:hover{color:var(--gold);}
+  @media (max-width:640px){.case>div,.facts>div{grid-template-columns:1fr;gap:4px;}}
+
+  /* ---------- PAPER SYSTEM ---------- */
+  :root{--bg:#f5f1e8;--surface:#efe9da;--surface-2:#e8e0cd;--line:#d8cfba;--ink:#1d1a16;--ink-dim:#6a6252;--gold:#8a5f00;--green:#1d1a16;--green-bright:#e8b93c;--radius:6px;
+    --sage:#9db48c;--amber:#e8b93c;--teal:#4f9a94;--brick:#c8442c;}
+  body{background-color:var(--bg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .27 0 0 0 0 .15 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  header.site-nav{background:rgba(245,241,232,.9);}
+  .ruler,.eyebrow{display:none;}
+  .hero{background:none;}
+  .mono,.chapter-num,.video-tag,.ig-tag,.facts dt,.case dt{text-transform:uppercase;letter-spacing:.14em;font-size:12px;}
+  h1.display{font-family:'Inter Tight','Inter',sans-serif;font-weight:800;letter-spacing:-.03em;line-height:.95;font-size:clamp(48px,10vw,120px);text-transform:uppercase;margin:18px 0 14px;}
+  .w{display:inline-block;animation:wordIn .5s ease-out backwards;animation-delay:calc(var(--i)*.18s + .1s);}
+  @keyframes wordIn{from{opacity:0;transform:translateY(.35em) rotate(-3deg);}to{opacity:1;transform:none;}}
+  .hero-top{display:flex;justify-content:space-between;color:var(--ink-dim);}
+  .role-line{font-family:'Inter Tight','Inter',sans-serif;font-weight:600;text-transform:none;letter-spacing:-.01em;font-size:clamp(22px,3.4vw,34px);color:var(--ink);margin:0 0 14px;}
+  .tagline{color:var(--ink-dim);margin:0 0 22px;}
+  .mk{background:linear-gradient(var(--mk,var(--amber)),var(--mk,var(--amber))) no-repeat 0 88%/0 .4em;padding:0 .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone;transition:background-size .9s ease-out;color:var(--ink);}
+  .in-view .mk{background-size:100% .4em;}
+  .hero .mk{background-size:100% .4em;animation:sweep .9s .7s ease-out backwards;}
+  @keyframes sweep{from{background-size:0 .4em;}to{background-size:100% .4em;}}
+  .hero-card{display:block;max-width:560px;margin:0 0 26px;padding:16px 20px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(60,45,20,.14);text-decoration:none;animation:floaty 6s ease-in-out infinite;transition:box-shadow .3s ease-out;}
+  .hero-card .mono{display:block;color:var(--ink-dim);margin-bottom:6px;}
+  .hero-card:hover{box-shadow:0 14px 30px rgba(60,45,20,.2);}
+  @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+  .btn-primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .btn-primary:hover{background:var(--amber);color:var(--ink);border-color:var(--amber);}
+  .chapter-title{font-family:'Inter Tight','Inter',sans-serif;font-weight:800;letter-spacing:-.02em;text-transform:none;display:inline;padding:0 .15em;
+    background:linear-gradient(var(--mk,var(--amber)),var(--mk,var(--amber))) no-repeat 0 90%/0 .34em;box-decoration-break:clone;-webkit-box-decoration-break:clone;transition:background-size .9s ease-out;}
+  .in-view .chapter-title{background-size:100% .34em;}
+  #dots{--mk:var(--sage);}#irrazonables,#podcast{--mk:var(--amber);}#felipe,#short{--mk:var(--teal);}#events,#personal{--mk:var(--brick);}
+  .video-card{transition:transform .3s ease-out;}.video-card:hover{transform:translateY(-4px);}
+  .index-title{font-family:'Inter Tight','Inter',sans-serif;font-weight:800;}
+  .index{background:var(--surface);border-radius:14px;padding:6px 22px;}
+  .index li{opacity:0;transform:translateY(8px);transition:opacity .5s ease-out,transform .5s ease-out;transition-delay:calc(var(--i)*.1s);}
+  .index.in-view li{opacity:1;transform:none;}
+  .index a{display:grid;grid-template-columns:44px 1fr;align-items:start;}
+  .index .n{color:var(--ink-dim);padding-top:3px;}
+  .index .t b{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.14em;}
+  .index .t i{display:block;font-family:'Newsreader',serif;font-style:italic;font-size:17px;color:var(--ink-dim);margin-top:4px;}
+  .samples{color:var(--ink-dim);margin:18px 0 0;}
+  .accent{color:inherit;background:linear-gradient(var(--amber),var(--amber)) no-repeat 0 90%/100% .3em;}
+  .hero-pitch{color:var(--ink);}
+  .index .mk{background-position:0 75%;}
+  .index.in-view .mk{background-size:100% .7em;}
+  .ig-link,.ig-link *{color:var(--gold);}
+  #dots .chapter-intro,#irrazonables .chapter-intro{display:none;}
+  @media (max-width:640px){.nav-inner{gap:10px;padding:12px 16px;}.nav-mark{display:none;}.nav-links{gap:14px;margin:0 auto 0 0;padding:0;}.nav-links a{font-size:11px;letter-spacing:.08em;}.hero-top{font-size:11px;}}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-mark">JORGE<span>.</span>VENEGAS</div>
+    <ul class="nav-links">
+      <li><a href="#about" data-i18n="navAbout">About</a></li>
+      <li><a href="#dots" data-i18n="navWork">Cases</a></li>
+      <li><a href="#tools" data-i18n="navTools">Capabilities</a></li>
+      <li><a href="#contact" data-i18n="navContact">Contact</a></li>
+    </ul>
+    <button id="langToggle" class="lang-toggle mono" type="button" aria-label="Switch language / Cambiar idioma">ES</button>
+  </div>
+</header>
+
+<div class="ruler" role="presentation"></div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-top mono"><span data-i18n="heroTopL">Portfolio · 2026</span><span>JV — 01/05</span></div>
+      <h1 class="display"><span class="w" style="--i:0">JORGE</span> <span class="w" style="--i:1">VENEGAS</span></h1>
+      <p class="role-line"><span data-i18n="heroRoleA">Content Producer &amp;</span> <span class="mk">Community Manager</span></p>
+      <p class="tagline mono" data-i18n="heroTag">Content that is planned, produced, and published</p>
+      <a class="hero-card" href="#dots"><span class="mono" data-i18n="hcL">Case 01 · 48DOTS</span><span data-i18n="hcT">Content production for brands and events. Includes TEDx Jardín de los Palacios, where I took part in the organization.</span></a>
+      <p class="hero-pitch" data-i18n="heroPitch">
+        Content production and community management: strategy, publishing, and analysis on Instagram, TikTok, Facebook, X, and YouTube, plus paid campaigns on Meta and TikTok. 5 years in content production, 100+ audiovisual pieces.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#dots" data-i18n="ctaWork">See the cases ↓</a>
+        <a class="btn btn-ghost" href="mailto:jorgevenegas2344@gmail.com" data-i18n="ctaEmail">Email me</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/venegasjorger" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT + INDEX -->
+  <section class="chapter" id="about">
+    <div class="wrap">
+      <div class="chapter-head reveal"><h2 class="chapter-title" data-i18n="aboutTitle">Who I am</h2></div>
+      <dl class="facts reveal">
+        <div><dt data-i18n="f1L">Content</dt><dd data-i18n="f1">5 years in content production; 4 to 5 as community manager.</dd></div>
+        <div><dt data-i18n="f2L">Social</dt><dd data-i18n="f2">Daily work on Instagram, TikTok, Facebook, X, and YouTube and their business tools.</dd></div>
+        <div><dt data-i18n="f3L">Scheduling &amp; metrics</dt><dd data-i18n="f3">Meta Business Suite (my strongest) and Hootsuite.</dd></div>
+        <div><dt data-i18n="f4L">Paid campaigns</dt><dd data-i18n="f4">Meta and TikTok for 2 to 3 years: budget, audiences, and results. Budgets of $20,000 to $30,000 MXN, no overruns. I can review agency work.</dd></div>
+        <div><dt data-i18n="f5L">Languages</dt><dd data-i18n="f5">Creative writing in Spanish and English. Intermediate-high English: 6 to 7 months serving the Xfinity account fully in English, by phone and chat.</dd></div>
+        <div><dt data-i18n="f6L">Events</dt><dd data-i18n="f6">Kings League and Queens League coverage and brand collaboration; TEDx Jardín de los Palacios (event organization); events with Coppel, Compartamos Banco, and MetLife; in-person conferences and webinars.</dd></div>
+        <div><dt data-i18n="f7L">Education</dt><dd data-i18n="f7">Communication and Information, Universidad Autónoma de Aguascalientes (degree in process). INSIDE LVMH, Encuentro Creativo, and Crehana courses with Google. Awarded a scholarship to study at Domus Academy (Italy).</dd></div>
+      </dl>
+      <h3 class="index-title reveal" data-i18n="idxTitle">Start here: cases</h3>
+      <ul class="index reveal">
+        <li style="--i:0"><a href="#dots"><span class="n mono">01</span><span class="t"><b class="mk" style="--mk:var(--sage)">48DOTS</b><i data-i18n="ix1">Production and content · TEDx Jardín de los Palacios</i></span></a></li>
+        <li style="--i:1"><a href="#irrazonables"><span class="n mono">02</span><span class="t"><b class="mk" style="--mk:var(--amber)">IRRAZONABLES</b><i data-i18n="ix2">Content coordination for 10+ brands</i></span></a></li>
+        <li style="--i:2"><a href="#felipe"><span class="n mono">03</span><span class="t"><b class="mk" style="--mk:var(--teal)">FELIPEFINANCE · ENDEMUS TV</b><i data-i18n="ix3">Marketing and video editing</i></span></a></li>
+        <li style="--i:3"><a href="#events"><span class="n mono">04</span><span class="t"><b class="mk" style="--mk:var(--brick)">EVENTS AND COVERAGE</b><i data-i18n="ix4">Coverage, TEDx, conferences, and webinars</i></span></a></li>
+        </ul>
+      <p class="samples mono reveal"><span data-i18n="sampL">Samples:</span> <a href="#podcast" data-i18n="sp1">Podcast</a> · <a href="#short" data-i18n="sp2">Short film</a> · <a href="#personal" data-i18n="sp3">Personal work</a></p>
+    </div>
+  </section>
+
+  <!-- 48DOTS -->
+  <section class="chapter" id="dots">
+    <div class="wrap">
+      <div class="chapter-head reveal">
+        <span class="chapter-num mono" data-i18n="c1">Case 01</span>
+        <h2 class="chapter-title" data-i18n="dotsTitle">48DOTS — Brands &amp; Events</h2>
+      </div>
+      <p class="chapter-intro reveal" data-i18n="dotsIntro">Co-founder, Creative Operations &amp; Brand Strategy (2025–2026).</p>
+      <dl class="case reveal">
+        <div><dt data-i18n="roleL">Role</dt><dd data-i18n="dotsRole">Co-founder, Creative Operations &amp; Brand Strategy, 2025–2026</dd></div>
+        <div><dt data-i18n="resultL">Result</dt><dd data-i18n="dotsResult">An Instagram post I directed reached 2,000,000 views. Took a brand from 0 to 5,000 followers. Real-time content at an activation at Estadio de los Rieleros. At TEDx Jardín de los Palacios: visual concept support, the event intro video, and each speaker's presentation video.</dd></div>
+      </dl>
+      <!-- PENDIENTE: agregar "Necesidad" y la frase de decisiones (formato, ritmo, enfoque) de este caso -->
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DICPvpTpsQA/?img_index=1" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="suaveTag">El Suave · Client</div>
+            <p class="ig-title" data-i18n="dotsCard1Title">Seasonal drink</p>
+            <p class="ig-desc" data-i18n="dotsCard1Desc">Product content for a bar/restaurant.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DTlNL6EgERy/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DVZWWL6jeu-/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <!-- duplicado para el loop continuo del carrusel -->
+          <a class="ig-card" href="https://www.instagram.com/p/DICPvpTpsQA/?img_index=1" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="suaveTag">El Suave · Client</div>
+            <p class="ig-title" data-i18n="dotsCard1Title">Seasonal drink</p>
+            <p class="ig-desc" data-i18n="dotsCard1Desc">Product content for a bar/restaurant.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DTlNL6EgERy/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DVZWWL6jeu-/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono" data-i18n="indegoTag">Indegostudio · Brand</div>
+            <p class="ig-title" data-i18n="dotsCard2Title">Product campaign</p>
+            <p class="ig-desc" data-i18n="dotsCard2Desc">Clothing brand run under 48dots.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IRRAZONABLES REELS -->
+  <section class="chapter" id="irrazonables">
+    <div class="wrap">
+      <div class="chapter-head reveal">
+        <span class="chapter-num mono" data-i18n="c2">Case 02</span>
+        <h2 class="chapter-title" data-i18n="reelsTitle">Irrazonables — Brand content</h2>
+      </div>
+      <p class="chapter-intro reveal" data-i18n="reelsIntro">Editor and production coordinator (2024–2026).</p>
+      <dl class="case reveal">
+        <div><dt data-i18n="roleL">Role</dt><dd data-i18n="reelsRole">Editor and production coordinator, 2024–2026. Coordinated content for 10+ brands in parallel: editorial calendars, briefs, campaigns, and activations.</dd></div>
+        <div><dt data-i18n="resultL">Result</dt><dd data-i18n="reelsResult">100+ audiovisual pieces, some up to 1M views. Publishing pace went from 1 to 3 pieces per day.</dd></div>
+      </dl>
+      <!-- PENDIENTE: agregar "Necesidad" y la frase de decisiones (formato, ritmo, enfoque) de este caso -->
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DaG6mABtT2m/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DXu62zUNkWC/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card reveal" href="https://www.instagram.com/p/DWXXCjLDb2i/" target="_blank" rel="noopener">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <!-- duplicado para el loop continuo del carrusel -->
+          <a class="ig-card" href="https://www.instagram.com/p/DaG6mABtT2m/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DXu62zUNkWC/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+          <a class="ig-card" href="https://www.instagram.com/p/DWXXCjLDb2i/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <div class="ig-play">▶</div>
+            <div class="ig-tag mono">Irrazonables · Reel</div>
+            <p class="ig-title" data-i18n="reelsCardTitle">Brand content</p>
+            <p class="ig-desc" data-i18n="reelsCardDesc">Short-form for Instagram — script, edit, and pacing.</p>
+            <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="felipe">
+    <div class="wrap">
+      <div class="chapter-head reveal"><span class="chapter-num mono" data-i18n="c3">Case 03</span><h2 class="chapter-title" data-i18n="felTitle">FelipeFinance · Endemus TV</h2></div>
+      <dl class="case reveal">
+        <div><dt data-i18n="roleL">Role</dt><dd data-i18n="felRole">Marketing and production, 2023–2024</dd></div>
+        <div><dt data-i18n="workL">Scope</dt><dd data-i18n="felWork">Marketing, video editing, community management, scripts, and reports.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="chapter" id="events">
+    <div class="wrap">
+      <div class="chapter-head reveal"><span class="chapter-num mono" data-i18n="c4">Case 04</span><h2 class="chapter-title" data-i18n="evTitle">Events and coverage</h2></div>
+      <dl class="case reveal">
+        <div><dt data-i18n="roleL">Role</dt><dd data-i18n="evRole">Coverage, collaboration, and organization</dd></div>
+        <div><dt data-i18n="workL">Scope</dt><dd data-i18n="evWork">Kings League and Queens League coverage and brand collaboration; TEDx Jardín de los Palacios (event organization); events with Coppel, Compartamos Banco, and MetLife; in-person conferences and webinars.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- PODCAST -->
+  <section class="chapter" id="podcast">
+    <div class="wrap">
+      <div class="chapter-head reveal">
+        <span class="chapter-num mono" data-i18n="sm">Sample</span>
+        <h2 class="chapter-title">Podcast</h2>
+      </div>
+      <p class="chapter-intro reveal" data-i18n="podcastIntro">
+        Two seasons, 60 episodes. I own the full pipeline: season planning, guest outreach
+        and recording, editing, and publishing — <b>a previously dormant channel, now at
+        5,000+ subscribers and 1M+ total views.</b>
+      </p>
+      <div class="video-grid">
+        <div class="video-card reveal">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/pVPRPmlSZ-w" title="Podcast episodio A" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono">Irrazonables — Podcast</div>
+            <p class="video-title">Humanos en la Era de la IA</p>
+            <p class="video-desc" data-i18n="podcastDesc1">Full episode — recorded, edited, and published.</p>
+          </div>
+        </div>
+        <div class="video-card reveal">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/c8gRa3lI4jY" title="Podcast episodio B" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono">Irrazonables — Podcast</div>
+            <p class="video-title">Humanos en la Era de la IA</p>
+            <p class="video-desc" data-i18n="podcastDesc2">Another episode from the series — same end-to-end process.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORTOMETRAJE -->
+  <section class="chapter" id="short">
+    <div class="wrap">
+      <div class="chapter-head reveal">
+        <span class="chapter-num mono" data-i18n="sm">Sample</span>
+        <h2 class="chapter-title" data-i18n="shortTitle">Short Film</h2>
+      </div>
+      <p class="chapter-intro reveal" data-i18n="shortIntro">
+        A short film I directed, produced, and edited, with a crew of up to 15 people —
+        from script to delivery.
+      </p>
+      <div class="video-grid">
+        <div class="video-card reveal">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/vhloBwTZuiY" title="Cortometraje" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-blur-overlay" onclick="this.classList.add('is-hidden')">
+              <div class="blur-play">▶</div>
+            </div>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono" data-i18n="shortTag">Direction · Production · Editing</div>
+            <p class="video-title" data-i18n="shortTitle">Short Film</p>
+            <p class="video-desc" data-i18n="shortDesc">Personal project — own concept, shoot, and post-production.</p>
+          </div>
+        </div>
+        <div class="video-card reveal">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/tr6qwabFE44" title="Short Film 2" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-blur-overlay" onclick="this.classList.add('is-hidden')">
+              <div class="blur-play">▶</div>
+            </div>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono" data-i18n="shortTag">Direction · Production · Editing</div>
+            <p class="video-title" data-i18n="shortTitle">Short Film</p>
+            <p class="video-desc" data-i18n="shortDesc">Personal project — own concept, shoot, and post-production.</p>
+          </div>
+        </div>
+        <div class="video-card reveal">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/Pi8kieGNw2s?start=140" title="Short Film 3" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-blur-overlay" onclick="this.classList.add('is-hidden')">
+              <div class="blur-play">▶</div>
+            </div>
+          </div>
+          <div class="video-meta">
+            <div class="video-tag mono" data-i18n="shortTag">Direction · Production · Editing</div>
+            <p class="video-title" data-i18n="shortTitle">Short Film</p>
+            <p class="video-desc" data-i18n="shortDesc">Personal project — own concept, shoot, and post-production.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONAL -->
+  <section class="chapter" id="personal">
+    <div class="wrap">
+      <div class="chapter-head reveal">
+        <span class="chapter-num mono" data-i18n="sm">Sample</span>
+        <h2 class="chapter-title" data-i18n="personalTitle">Personal Work</h2>
+      </div>
+      <p class="chapter-intro reveal" data-i18n="personalIntro">
+        No client brief — my own photo and video work, to keep the eye sharp.
+      </p>
+      <div class="card-grid">
+        <a class="ig-card reveal" href="https://www.instagram.com/p/DAT-qKwRcE1/?img_index=1" target="_blank" rel="noopener">
+          <div class="ig-play">▶</div>
+          <div class="ig-tag mono" data-i18n="personalTag">Personal profile</div>
+          <p class="ig-title" data-i18n="personalCardTitle">CDMX — personal series</p>
+          <p class="ig-desc" data-i18n="personalCardDesc">Personal photo and video work in Mexico City.</p>
+          <div class="ig-link" data-i18n="viewIG">View on Instagram ↗</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="chapter" id="tools">
+    <div class="wrap">
+      <div class="chapter-head reveal">
+        <span class="chapter-num mono" data-i18n="cap">Capabilities</span>
+        <h2 class="chapter-title" data-i18n="toolsTitle">Tools</h2>
+      </div>
+      <div class="tools-row">
+        <span class="tool-badge primary reveal" tabindex="0">Adobe Premiere Pro
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobepremierepro/9999FF" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Pr</span></span>
+        </span>
+        <span class="tool-badge primary reveal" tabindex="0">Adobe After Effects
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobeaftereffects/9999FF" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ae</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">CapCut
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/capcut/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">CC</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Canva
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/canva/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ca</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Higgsfield
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/higgsfield/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Hf</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Midjourney
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/midjourney/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Mj</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">RunwayML
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/runway/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Rw</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Adobe Firefly
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobe/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Fy</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">DaVinci Resolve
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/davinciresolve/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Dr</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Adobe Photoshop
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobephotoshop/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ps</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0">Adobe Illustrator
+          <span class="tool-preview"><img src="https://cdn.simpleicons.org/adobeillustrator/E8B854" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="tool-fallback">Ai</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0" data-i18n="toolCamera">Camera
+          <span class="tool-preview"><span class="tool-fallback" style="display:block;">📷</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0" data-i18n="toolGimbal">Gimbal
+          <span class="tool-preview"><span class="tool-fallback" style="display:block;">🎥</span></span>
+        </span>
+        <span class="tool-badge reveal" tabindex="0" data-i18n="toolLighting">Lighting
+          <span class="tool-preview"><span class="tool-fallback" style="display:block;">💡</span></span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <p class="contact-headline reveal" data-i18n="footerHeadline">Let's work on your <span class="accent">content</span>.</p>
+    <div class="contact-row">
+      <div class="contact-item reveal">
+        <span data-i18n="footerEmailLabel">Email</span>
+        <a href="mailto:jorgevenegas2344@gmail.com">jorgevenegas2344@gmail.com</a>
+      </div>
+      <div class="contact-item reveal">
+        <span data-i18n="footerPhoneLabel">Phone</span>
+        <a href="tel:+524491818001">449&nbsp;181&nbsp;80&nbsp;01</a>
+      </div>
+      <div class="contact-item reveal">
+        <span data-i18n="footerLocationLabel">Location</span>
+        <span style="color:var(--ink);">Aguascalientes, Mexico</span>
+      </div>
+      <div class="contact-item reveal">
+        <span data-i18n="footerLinkedinLabel">LinkedIn</span>
+        <a href="https://www.linkedin.com/in/venegasjorger" target="_blank" rel="noopener">linkedin.com/in/venegasjorger</a>
+      </div>
+    </div>
+    <div class="foot-end">
+      <span>© Jorge Venegas Romo</span>
+      <span>Portfolio · 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var translations = {
+    en: {
+      navWork: "Work", navTools: "Tools", navContact: "Contact",
+      heroRole: "Video Editor &amp; Motion Graphics Designer",
+      heroPitch: "I cut short-form social content in Premiere Pro and After Effects: podcast episodes, a short film, brand content, and paid campaigns. 100+ pieces delivered, peaks of up to 1M views, with AI tools (Higgsfield, Midjourney, RunwayML, Firefly) built into the daily workflow.",
+      ctaWork: "See the work ↓", ctaEmail: "Email me",
+      podcastIntro: "Two seasons, 60 episodes. I own the full pipeline: season planning, guest outreach and recording, editing, and publishing — <b>a previously dormant channel, now at 5,000+ subscribers and 1M+ total views.</b>",
+      podcastDesc1: "Full episode — recorded, edited, and published.",
+      podcastDesc2: "Another episode from the series — same end-to-end process.",
+      shortTitle: "Short Film",
+      shortIntro: "A short film I directed, produced, and edited, with a crew of up to 15 people — from script to delivery.",
+      shortTag: "Direction · Production · Editing",
+      shortDesc: "Personal project — own concept, shoot, and post-production.",
+      reelsTitle: "Brand Reels — Irrazonables",
+      reelsIntro: "Part of <b>100+ pieces delivered</b> for the agency's brands — peaks of up to <b>1,000,000 views</b> per piece.",
+      reelsCardTitle: "Brand content",
+      reelsCardDesc: "Short-form for Instagram — script, edit, and pacing.",
+      viewIG: "View on Instagram ↗",
+      dotsTitle: "48dots — Clients &amp; In-House Brand",
+      dotsIntro: "As co-founder, I edit and direct content for agency and client brands, keeping each one's tone consistent.",
+      suaveTag: "El Suave · Client",
+      dotsCard1Title: "Seasonal drink",
+      dotsCard1Desc: "Product content for a bar/restaurant.",
+      indegoTag: "Indegostudio · Brand",
+      dotsCard2Title: "Product campaign",
+      dotsCard2Desc: "Clothing brand run under 48dots.",
+      personalTitle: "Personal Work",
+      personalIntro: "No client brief — my own photo and video work, to keep the eye sharp.",
+      personalTag: "Personal profile",
+      personalCardTitle: "CDMX — personal series",
+      personalCardDesc: "Personal photo and video work in Mexico City.",
+      toolsTitle: "Tools",
+      toolCamera: "Camera", toolGimbal: "Gimbal", toolLighting: "Lighting",
+      footerHeadline: "Let's build the <span class=\"accent\">next cut</span>.",
+      footerEmailLabel: "Email", footerPhoneLabel: "Phone",
+      footerLocationLabel: "Location", footerLinkedinLabel: "LinkedIn",
+      navAbout:"About", navWork:"Cases", navTools:"Capabilities",
+      heroRole:"Content Producer &amp; Community Manager",
+      heroPitch:"Content production and community management: strategy, publishing, and analysis on Instagram, TikTok, Facebook, X, and YouTube, plus paid campaigns on Meta and TikTok. 5 years in content production, 100+ audiovisual pieces.",
+      ctaWork:"See the cases ↓",
+      footerHeadline:"Let's work on your <span class=\"accent\">content</span>.",
+      roleL:"Role", resultL:"Result",
+      dotsTitle:"48DOTS — Brands &amp; Events", dotsIntro:"Co-founder, Creative Operations &amp; Brand Strategy (2025–2026).",
+      dotsRole:"Co-founder, Creative Operations &amp; Brand Strategy, 2025–2026",
+      dotsResult:"An Instagram post I directed reached 2,000,000 views. Took a brand from 0 to 5,000 followers. Real-time content at an activation at Estadio de los Rieleros. At TEDx Jardín de los Palacios: visual concept support, the event intro video, and each speaker's presentation video.",
+      reelsTitle:"Irrazonables — Brand content", reelsIntro:"Editor and production coordinator (2024–2026).",
+      reelsRole:"Editor and production coordinator, 2024–2026. Coordinated content for 10+ brands in parallel: editorial calendars, briefs, campaigns, and activations.",
+      reelsResult:"100+ audiovisual pieces, some up to 1M views. Publishing pace went from 1 to 3 pieces per day.",
+      aboutTitle:"Who I am", idxTitle:"Start here: projects",
+      f1L:"Content", f1:"5 years in content production; 4 to 5 as community manager.",
+      f2L:"Social", f2:"Daily work on Instagram, TikTok, Facebook, X, and YouTube and their business tools.",
+      f3L:"Scheduling &amp; metrics", f3:"Meta Business Suite (my strongest) and Hootsuite.",
+      f4L:"Paid campaigns", f4:"Meta and TikTok for 2 to 3 years: budget, audiences, and results. Budgets of $20,000 to $30,000 MXN, no overruns. I can review agency work.",
+      f5L:"Languages", f5:"Creative writing in Spanish and English. Intermediate-high English: 6 to 7 months serving the Xfinity account fully in English, by phone and chat.",
+      f6L:"Events", f6:"Kings League and Queens League coverage and brand collaboration; TEDx Jardín de los Palacios (event organization); events with Coppel, Compartamos Banco, and MetLife; in-person conferences and webinars.",
+      f7L:"Education", f7:"Communication and Information, Universidad Autónoma de Aguascalientes (degree in process). INSIDE LVMH, Encuentro Creativo, and Crehana courses with Google. Awarded a scholarship to study at Domus Academy (Italy).",
+      idx1:"48DOTS — co-founder, 2025–2026", idx2:"Irrazonables — brand content, 2024–2026", idx3:"Irrazonables podcast", idx4:"Short film", idx5:"Personal work",
+      heroTopL:"Portfolio · 2026", heroRoleA:"Content Producer &amp;", heroTag:"Content that is planned, produced, and published",
+      hcL:"Case 01 · 48DOTS", hcT:"Content production for brands and events. Includes TEDx Jardín de los Palacios, where I took part in the organization.",
+      c1:"Case 01", c2:"Case 02", c3:"Case 03", c4:"Case 04", sm:"Sample", cap:"Capabilities", workL:"Scope",
+      felTitle:"FelipeFinance · Endemus TV", felRole:"Marketing and production, 2023–2024", felWork:"Marketing, video editing, community management, scripts, and reports.",
+      evTitle:"Events and coverage", evRole:"Coverage, collaboration, and organization", evWork:"Kings League and Queens League coverage and brand collaboration; TEDx Jardín de los Palacios (event organization); events with Coppel, Compartamos Banco, and MetLife; in-person conferences and webinars.",
+      idxTitle:"Start here: cases", ix1:"Production and content · TEDx Jardín de los Palacios", ix2:"Content coordination for 10+ brands", ix3:"Marketing and video editing", ix4:"Coverage, TEDx, conferences, and webinars",
+      sampL:"Samples:", sp1:"Podcast", sp2:"Short film", sp3:"Personal work"
+    },
+    es: {
+      navWork: "Trabajo", navTools: "Herramientas", navContact: "Contacto",
+      heroRole: "Editor de Video y Diseñador de Motion Graphics",
+      heroPitch: "Edito contenido corto para redes en Premiere Pro y After Effects: episodios de podcast, un cortometraje, contenido de marca y campañas pagadas. 100+ piezas entregadas, picos de hasta 1M de vistas, con herramientas de IA (Higgsfield, Midjourney, RunwayML, Firefly) integradas al flujo de trabajo diario.",
+      ctaWork: "Ver el trabajo ↓", ctaEmail: "Escríbeme",
+      podcastIntro: "Dos temporadas, 60 episodios. Manejo todo el proceso: planeación de temporada, contacto y grabación de invitados, edición y publicación — <b>un canal que estaba dormido y ahora tiene 5,000+ suscriptores y 1M+ de vistas totales.</b>",
+      podcastDesc1: "Episodio completo — grabado, editado y publicado.",
+      podcastDesc2: "Otro episodio de la serie — mismo proceso de punta a punta.",
+      shortTitle: "Cortometraje",
+      shortIntro: "Un cortometraje que dirigí, produje y edité, con un equipo de hasta 15 personas — de guión a entrega.",
+      shortTag: "Dirección · Producción · Edición",
+      shortDesc: "Proyecto personal — concepto, rodaje y postproducción propios.",
+      reelsTitle: "Reels de Marca — Irrazonables",
+      reelsIntro: "Parte de las <b>100+ piezas entregadas</b> para las marcas de la agencia — picos de hasta <b>1,000,000 de vistas</b> por pieza.",
+      reelsCardTitle: "Contenido de marca",
+      reelsCardDesc: "Formato corto para Instagram — guión, edición y ritmo.",
+      viewIG: "Ver en Instagram ↗",
+      dotsTitle: "48dots — Clientes y Marca Propia",
+      dotsIntro: "Como cofundador, edito y dirijo contenido para las marcas de la agencia y de clientes, manteniendo el tono de cada una.",
+      suaveTag: "El Suave · Cliente",
+      dotsCard1Title: "Bebida de temporada",
+      dotsCard1Desc: "Contenido de producto para un bar/restaurante.",
+      indegoTag: "Indegostudio · Marca",
+      dotsCard2Title: "Campaña de producto",
+      dotsCard2Desc: "Marca de ropa operada bajo 48dots.",
+      personalTitle: "Trabajo Personal",
+      personalIntro: "Sin brief de cliente — mi propio trabajo de foto y video, para mantener el ojo afilado.",
+      personalTag: "Perfil personal",
+      personalCardTitle: "CDMX — serie personal",
+      personalCardDesc: "Trabajo personal de foto y video en la Ciudad de México.",
+      toolsTitle: "Herramientas",
+      toolCamera: "Cámara", toolGimbal: "Gimbal", toolLighting: "Iluminación",
+      footerHeadline: "Construyamos el <span class=\"accent\">próximo corte</span>.",
+      footerEmailLabel: "Correo", footerPhoneLabel: "Teléfono",
+      footerLocationLabel: "Ubicación", footerLinkedinLabel: "LinkedIn",
+      navAbout:"Quién soy", navWork:"Casos", navTools:"Capacidades",
+      heroRole:"Content Producer &amp; Community Manager",
+      heroPitch:"Producción de contenido y community management: estrategia, publicación y análisis en Instagram, TikTok, Facebook, X y YouTube, más campañas pagadas en Meta y TikTok. 5 años en producción de contenido, más de 100 piezas audiovisuales.",
+      ctaWork:"Ver los casos ↓",
+      footerHeadline:"Hablemos de tu <span class=\"accent\">contenido</span>.",
+      roleL:"Rol", resultL:"Resultado",
+      dotsTitle:"48DOTS — Marcas y eventos", dotsIntro:"Cofundador, Creative Operations &amp; Brand Strategy (2025–2026).",
+      dotsRole:"Cofundador, Creative Operations &amp; Brand Strategy, 2025–2026",
+      dotsResult:"Un post de Instagram que dirigí llegó a 2,000,000 de visualizaciones. Llevé una marca de 0 a 5,000 seguidores. Produje contenido en tiempo real en una activación en el Estadio de los Rieleros. En el TEDx Jardín de los Palacios: apoyo al concepto visual, video de introducción del evento y video de presentación de cada ponente.",
+      reelsTitle:"Irrazonables — Contenido de marca", reelsIntro:"Editor y coordinador de producción (2024–2026).",
+      reelsRole:"Editor y coordinador de producción, 2024–2026. Coordiné contenido para más de 10 marcas en paralelo: calendarios editoriales, briefs, campañas y activaciones.",
+      reelsResult:"Más de 100 piezas audiovisuales, algunas de hasta 1M de visualizaciones. El ritmo de publicación pasó de 1 a 3 piezas al día.",
+      aboutTitle:"Quién soy", idxTitle:"Empieza aquí: proyectos",
+      f1L:"Contenido", f1:"5 años en producción de contenido; 4 a 5 como community manager.",
+      f2L:"Redes", f2:"Manejo diario de Instagram, TikTok, Facebook, X y YouTube y sus herramientas de negocio.",
+      f3L:"Programación y métricas", f3:"Meta Business Suite (la que mejor domino) y Hootsuite.",
+      f4L:"Campañas pagadas", f4:"Meta y TikTok durante 2 a 3 años: presupuesto, públicos y resultados. Presupuestos de $20,000 a $30,000 MXN, sin sobrecostos. Puedo revisar el trabajo de agencias.",
+      f5L:"Idiomas", f5:"Redacción creativa en español e inglés. Inglés intermedio-alto: 6 a 7 meses atendiendo la cuenta de Xfinity completamente en inglés, por llamadas y chat.",
+      f6L:"Eventos", f6:"Cobertura y colaboración con marca en la Kings League y la Queens League; TEDx Jardín de los Palacios (organización del evento); eventos con Coppel, Compartamos Banco y MetLife; conferencias presenciales y webinars.",
+      f7L:"Formación", f7:"Comunicación e Información, Universidad Autónoma de Aguascalientes (título en trámite). INSIDE LVMH, Encuentro Creativo y cursos de Crehana con Google. Ganador de una beca para estudiar en Domus Academy (Italia).",
+      idx1:"48DOTS — cofundador, 2025–2026", idx2:"Irrazonables — contenido de marca, 2024–2026", idx3:"Podcast de Irrazonables", idx4:"Cortometraje", idx5:"Trabajo personal",
+      heroTopL:"Portafolio · 2026", heroRoleA:"Content Producer &amp;", heroTag:"Contenido que se planea, se produce y se publica",
+      hcL:"Caso 01 · 48DOTS", hcT:"Producción de contenido para marcas y eventos. Incluye el TEDx Jardín de los Palacios, donde participé en la organización.",
+      c1:"Caso 01", c2:"Caso 02", c3:"Caso 03", c4:"Caso 04", sm:"Muestra", cap:"Capacidades", workL:"Alcance",
+      felTitle:"FelipeFinance · Endemus TV", felRole:"Marketing y producción, 2023–2024", felWork:"Marketing, edición de video, community management, guiones y reportes.",
+      evTitle:"Eventos y coberturas", evRole:"Cobertura, colaboración y organización", evWork:"Cobertura y colaboración con marca en la Kings League y la Queens League; TEDx Jardín de los Palacios (organización del evento); eventos con Coppel, Compartamos Banco y MetLife; conferencias presenciales y webinars.",
+      idxTitle:"Empieza aquí: casos", ix1:"Producción y contenido · TEDx Jardín de los Palacios", ix2:"Coordinación de contenido para más de 10 marcas", ix3:"Marketing y edición de video", ix4:"Cobertura, TEDx, conferencias y webinars",
+      sampL:"Muestras:", sp1:"Podcast", sp2:"Cortometraje", sp3:"Trabajo personal"
+    }
+  };
+
+  var btn = document.getElementById('langToggle');
+  var root = document.documentElement;
+
+  function apply(lang){
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      var val = translations[lang][key];
+      if(val !== undefined){ el.innerHTML = val; }
+    });
+    root.setAttribute('lang', lang);
+    root.setAttribute('data-lang', lang);
+    if(btn){ btn.textContent = lang === 'en' ? 'ES' : 'EN'; }
+    try{ localStorage.setItem('jv-lang', lang); }catch(e){}
+  }
+
+  var saved = 'en';
+  try{ saved = localStorage.getItem('jv-lang') || 'en'; }catch(e){}
+  apply(saved);
+
+  if(btn){
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-lang') === 'es' ? 'es' : 'en';
+      apply(current === 'en' ? 'es' : 'en');
+    });
+  }
+})();
+</script>
+
+<script>
+(function(){
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  els.forEach(function(el, i){
+    el.style.transitionDelay = (i % 6) * 70 + 'ms';
+  });
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add('in-view'); });
+  }
+})();
+</script>
+
+</body>
+</html>
